@@ -1,0 +1,66 @@
+version: '3.8'
+
+networks:
+  mongonet:
+
+volumes:
+  mongodata:
+  keys:
+  logs:
+  db-certs:
+  web-certs:
+  
+secrets:
+  charts-mongodb-uri:
+    file: charts-mongodb-uri
+
+services:
+  mongodb:
+    image: mongo:4.4
+    container_name: mongodb
+    restart: always
+    volumes: 
+      - mongodata:/data/db
+    networks:
+      - mongonet
+
+  web_ui:
+    image: mongo-express
+    container_name: mongo_web_ui
+    restart: always
+    depends_on: 
+      - mongodb
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongodb
+    networks:
+      - mongonet
+
+  charts:
+    image: quay.io/mongodb/charts:19.12.2
+    container_name: mongo_charts
+    depends_on: 
+      - mongodb
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - keys:/mongodb-charts/volumes/keys
+      - logs:/mongodb-charts/volumes/logs
+      - db-certs:/mongodb-charts/volumes/db-certs
+      - web-certs:/mongodb-charts/volumes/web-certs
+#    environment:
+      # CHARTS_HTTPS_CERTIFICATE_FILE: charts-https.crt
+      # CHARTS_HTTPS_CERTIFICATE_KEY_FILE: charts-https.key
+      # CHARTS_SUPPORT_WIDGET_AND_METRICS: 'on'
+      # SSL_CERT_DIR: /mongodb-charts/volumes/db-certs
+   
+    networks:
+      - mongonet
+
+    secrets:
+      - charts-mongodb-uri
+
+# https://www.rockyourcode.com/using-docker-secrets-with-docker-compose/
+# https://blog.mikesir87.io/2017/05/using-docker-secrets-during-development/
