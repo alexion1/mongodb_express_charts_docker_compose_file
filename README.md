@@ -25,7 +25,7 @@ This script simplifies installation of these tools. If not found, Docker images 
 5. Check containers are up and running
   * open http://localhost:8081/ for MongoDB web UI (mongo-express)
   * open http://localhost:80/ for Charts login screen
-6. Create Charts user [see step 11 of offcial installation guide](https://docs.mongodb.com/charts/current/installation):
+6. Create Charts user (see step 11 of the [offcial installation guide](https://docs.mongodb.com/charts/current/installation)):
 ```shell  
 docker exec -it \
   $(docker container ls --filter name=_charts -q) \
