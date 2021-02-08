@@ -39,6 +39,15 @@ docker exec -it mongodb mongo
 ```
 Alternatively, you can use web UI to add/delete databases, collections, perform simple CRUD (create, read, update, delete) operations, import/export JSON documents.
 
+Note that MongoDB database tools are also included in the main MongoDB image (mongodump, mongoimport, mongoexport, etc). To access these tools, you need to open the bash shell:
+```shell
+docker exec -it mongodb bash
+```
+Now, for example, we can list files in MongoDB GridFS:
+```shell
+root@46f31ba97b8c:/# mongofiles -d=test list
+2021-02-08T15:47:45.077+0000    connected to: mongodb://localhost/
+```
 ## Thanks
 * [Using Docker Secrets during Development](https://blog.mikesir87.io/2017/05/using-docker-secrets-during-development/)
 * [The Difference Between Docker Compose And Docker Stack](https://vsupalov.com/difference-docker-compose-and-docker-stack/)
