@@ -5,6 +5,7 @@ This is intened to run on Linux, and is not tested for Windows and MacOS.
 [MongoDB](https://www.mongodb.com/) is a modern versatile user-friendly database. Here I use the [official image](https://hub.docker.com/_/mongo) of [MongoDB Community Edition](https://docs.mongodb.com/manual/installation/#mongodb-community-edition-installation-tutorials).
 [mongo-express](https://hub.docker.com/_/mongo-express) is a Web-based MongoDB admin interface. 
 [Mongo Charts](https://docs.mongodb.com/charts/current/) is a tool for MongoDB analytic.
+Included are also MongoDB database tools and Python API.
 
 This script simplifies installation of these tools. If not found, Docker images will be pulled by Docker Compose. These two files (*docker-compose.yml* and *charts-mongodb-uri*) is all you need to setup and run Mongo DB with Charts and web UI.
 
@@ -16,7 +17,7 @@ This script simplifies installation of these tools. If not found, Docker images 
 
 ## Steps:
 1. Make sure that Docker and [Docker Compose](https://github.com/docker/compose) are installed on your host machine. 
-2. Create a directory (e.g., mongo-test), copy these two files there (*docker-compose.yml* and *charts-mongodb-uri*), and enter it from your terminal.
+2. Create a working directory (e.g., *mongo-test*), copy these two files there (*docker-compose.yml* and *charts-mongodb-uri*), and enter it from your terminal.
 3. Type `docker-compose up`
 4. That should create 3 containers:
   * mongodb
@@ -39,7 +40,8 @@ docker exec -it mongodb mongo
 ```
 Alternatively, you can use web UI to add/delete databases, collections, perform simple CRUD (create, read, update, delete) operations, import/export JSON documents.
 
-Note that MongoDB database tools are also included in the main MongoDB image (mongodump, mongoimport, mongoexport, etc). To access these tools, you need to open the bash shell:
+## MongoDB database tools
+Note that [MongoDB database tools](https://docs.mongodb.com/database-tools/) are also included in the main MongoDB image (mongodump, mongoimport, mongoexport, mongostat, mongofiles, etc). To access these tools, you need to open the bash shell:
 ```shell
 docker exec -it mongodb bash
 ```
@@ -52,8 +54,26 @@ Press Ctrl+D to exit Mongo bash shell back to your user terminal.
 
 Next you can add user authorization and https protocol. Note that if you modify *docker-compose.yml* config file while MongoDB is runnning, it may create orphan containers that you would have to remove manually.
 
-To stop all three containers, type `docker-compose down`.
+To stop all three containers, type `docker-compose down`. 
 
+## Connecting from Python API
+To connect from Python API, run the following Docker command:
+```shell
+docker run -it --rm --network mongo-test_mongonet alexion1/pymongo ipython
+```
+This opens an iPython shell, but you can use regular python as well. The lighweight *pymongo* image is based on python:3.6.9-slim, with pip upgraded to pip-21, installed ipython 7.16, and pymongo 3.11. See [tutorial](https://pymongo.readthedocs.io/en/stable/tutorial.html) to connect to MongoDB. 
+
+The key point here is to connect to the correct bridge network. The network name is based on the working directory name, with added *_mongonet* suffix. Since in Step 2 we created directory *mongo-test*, here I use `--network mongo-test_mongonet` parameter. In general, the network name format is `<work-dir>_mongonet`. Note also that this network issue can be avoided by adding *pymongo* image to the *docker-compose* file.
+
+Now you can test MongoDB connection from Python API. Make sure to use `MongoClient('mongodb')` for connection:
+```python
+In [1]: import pymongo
+In [2]: client = pymongo.MongoClient('mongodb')
+In [3]: db = client.test
+In [4]: db.list_collection_names()
+Out[4]: []
+```
+Here *test* is a default empty MongoDB database. If `list_collection_names()` returns an empty list `[]`, it means that connection is successful. Otherwise it throws a TimeoutError.
 
 ## Thanks
 * [Using Docker Secrets during Development](https://blog.mikesir87.io/2017/05/using-docker-secrets-during-development/)
