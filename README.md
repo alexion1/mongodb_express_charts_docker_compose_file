@@ -20,9 +20,9 @@ This script simplifies installation of these tools. If not found, Docker images 
 2. Create a working directory (e.g., *mongo-test*), copy these two files there (*docker-compose.yml* and *charts-mongodb-uri*), and enter it from your terminal.
 3. Type `docker-compose up`
 4. That should create 3 containers:
-  * mongodb
-  * mongo_web_ui
-  * mongo_charts
+   * mongodb
+   * mongo_web_ui
+   * mongo_charts
 5. Check containers are up and running
   * open http://localhost:8081/ for MongoDB web UI (mongo-express)
   * open http://localhost:80/ for Charts login screen
@@ -40,6 +40,9 @@ docker exec -it mongodb mongo
 ```
 Alternatively, you can use web UI to add/delete databases, collections, perform simple CRUD (create, read, update, delete) operations, import/export JSON documents.
 
+To stop all three containers, type `docker-compose down`. 
+
+
 ## MongoDB database tools
 Note that [MongoDB database tools](https://docs.mongodb.com/database-tools/) are also included in the main MongoDB image (mongodump, mongoimport, mongoexport, mongostat, mongofiles, etc). To access these tools, you need to open the bash shell:
 ```shell
@@ -53,8 +56,6 @@ root@46f31ba97b8c:/# mongofiles -d=test list
 Press Ctrl+D to exit Mongo bash shell back to your user terminal.
 
 Next you can add user authorization and https protocol. Note that if you modify *docker-compose.yml* config file while MongoDB is runnning, it may create orphan containers that you would have to remove manually.
-
-To stop all three containers, type `docker-compose down`. 
 
 ## Connecting from Python API
 To connect from Python API, run the following Docker command:
@@ -78,3 +79,4 @@ Here *test* is a default empty MongoDB database. If `list_collection_names()` re
 ## Thanks
 * [Using Docker Secrets during Development](https://blog.mikesir87.io/2017/05/using-docker-secrets-during-development/)
 * [The Difference Between Docker Compose And Docker Stack](https://vsupalov.com/difference-docker-compose-and-docker-stack/)
+* [M220P: MongoDB for Python Developers](https://university.mongodb.com/courses/M220P/about)
