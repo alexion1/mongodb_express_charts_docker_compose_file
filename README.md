@@ -37,7 +37,7 @@ docker exec -it \
 ```shell
 docker exec -it mongodb mongo
 ```
-Alternatively, you can use web UI to add/delete databases, collections, perform simple CRUD (create, read, update, delete), import/export JSON documents.
+Alternatively, you can use web UI to add/delete databases, collections, perform simple CRUD (create, read, update, delete) operations, import/export JSON documents.
 
 ## Thanks
 * [Using Docker Secrets during Development](https://blog.mikesir87.io/2017/05/using-docker-secrets-during-development/)
