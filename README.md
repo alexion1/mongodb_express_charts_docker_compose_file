@@ -1,4 +1,4 @@
-# mongodb_express_charts_docker_compose_file
+# MongoDB with express and Charts Docker Compose file
 This is a Docker Compose file to run MongoDB (CE) + MongoExpress(WebUI) + MongoCharts in a single-machine setup without Swarm or Kubernetes.
 This is intened to run on Linux, and is not tested for Windows and MacOS. 
 
